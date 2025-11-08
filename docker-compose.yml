@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: expensetracker-postgres
+    environment:
+      POSTGRES_DB: expense_tracker
+      POSTGRES_USER: expense_user
+      POSTGRES_PASSWORD: expense_secure_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - expensetracker-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U expense_user -d expense_tracker"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: expensetracker-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@expensetracker.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    networks:
+      - expensetracker-network
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
+
+networks:
+  expensetracker-network:
+    driver: bridge
+
