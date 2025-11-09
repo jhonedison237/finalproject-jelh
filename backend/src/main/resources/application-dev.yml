@@ -1,0 +1,40 @@
+spring:
+  # Development-specific configurations
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  # Development database (same as default for now)
+  datasource:
+    url: jdbc:postgresql://localhost:5432/expense_tracker
+    username: expense_user
+    password: expense_secure_password
+
+# Development logging
+logging:
+  level:
+    root: INFO
+    com.expensetracker: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+# Development server configuration
+server:
+  port: 8080
+
+# JWT for development (less secure, for testing only)
+jwt:
+  secret: dev-secret-key-for-testing-only-do-not-use-in-production
+  expiration: 86400000 # 24 hours
+
+# Enable all actuator endpoints for development
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+

@@ -71,10 +71,6 @@ COMMENT ON COLUMN categories.color IS 'Hex color code for UI visualization';
 -- Purpose: Records individual income and expense transactions
 -- ============================================================================
 
--- Create ENUMs for transaction types
-CREATE TYPE transaction_type_enum AS ENUM ('INCOME', 'EXPENSE');
-CREATE TYPE payment_method_enum AS ENUM ('CASH', 'CARD', 'TRANSFER', 'OTHER');
-
 CREATE TABLE IF NOT EXISTS transactions (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL,
@@ -82,8 +78,8 @@ CREATE TABLE IF NOT EXISTS transactions (
     amount DECIMAL(12,2) NOT NULL,
     description VARCHAR(255) NOT NULL,
     transaction_date DATE NOT NULL,
-    transaction_type transaction_type_enum NOT NULL,
-    payment_method payment_method_enum NOT NULL,
+    transaction_type VARCHAR(20) NOT NULL,
+    payment_method VARCHAR(20) NOT NULL,
     notes VARCHAR(255),
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -97,6 +93,8 @@ CREATE TABLE IF NOT EXISTS transactions (
     
     -- Constraints
     CONSTRAINT check_amount_not_zero CHECK (amount != 0),
+    CONSTRAINT check_transaction_type CHECK (transaction_type IN ('INCOME', 'EXPENSE')),
+    CONSTRAINT check_payment_method CHECK (payment_method IN ('CASH', 'CARD', 'TRANSFER', 'OTHER')),
     CONSTRAINT check_transaction_date_not_future CHECK (transaction_date <= CURRENT_DATE),
     CONSTRAINT check_amount_sign CHECK (
         (transaction_type = 'INCOME' AND amount > 0) OR 

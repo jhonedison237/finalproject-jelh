@@ -1,0 +1,472 @@
+{
+	"info": {
+		"_postman_id": "expense-tracker-api-v1",
+		"name": "ExpenseTracker API",
+		"description": "Complete API collection for ExpenseTracker backend application.\n\nBase URL: http://localhost:8080\n\nFeatures:\n- Transaction Management (CRUD)\n- Category Management\n- Statistics and Summaries\n- Health Checks\n\nVersion: 1.0.0",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/health",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "health"]
+						},
+						"description": "Check if the API is running and healthy"
+					},
+					"response": []
+				},
+				{
+					"name": "Ping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/health/ping",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "health", "ping"]
+						},
+						"description": "Simple ping endpoint"
+					},
+					"response": []
+				}
+			],
+			"description": "Health check endpoints for monitoring"
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Get All Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/categories",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "categories"]
+						},
+						"description": "Retrieve all active categories for the current user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/categories/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "v1", "categories", "1"]
+						},
+						"description": "Get a specific category by its ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Category management endpoints"
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "CRUD Operations",
+					"item": [
+						{
+							"name": "Create Income Transaction",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 5000.00,\n  \"description\": \"Monthly Salary - December\",\n  \"categoryId\": 1,\n  \"transactionType\": \"INCOME\",\n  \"paymentMethod\": \"TRANSFER\",\n  \"transactionDate\": \"2024-12-01\",\n  \"notes\": \"Regular monthly salary payment\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/transactions",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "transactions"]
+								},
+								"description": "Create a new income transaction"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Expense Transaction",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 85.50,\n  \"description\": \"Grocery shopping at Supermarket\",\n  \"categoryId\": 2,\n  \"transactionType\": \"EXPENSE\",\n  \"paymentMethod\": \"CARD\",\n  \"transactionDate\": \"2024-12-08\",\n  \"notes\": \"Weekly groceries\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/transactions",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "transactions"]
+								},
+								"description": "Create a new expense transaction"
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Transactions (Paginated)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/transactions?page=0&size=20&sortBy=transactionDate&sortDir=DESC",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "transactions"],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"description": "Page number (0-indexed)"
+										},
+										{
+											"key": "size",
+											"value": "20",
+											"description": "Number of items per page"
+										},
+										{
+											"key": "sortBy",
+											"value": "transactionDate",
+											"description": "Field to sort by"
+										},
+										{
+											"key": "sortDir",
+											"value": "DESC",
+											"description": "Sort direction (ASC or DESC)"
+										}
+									]
+								},
+								"description": "Get all transactions with pagination and sorting"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Transaction by ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/transactions/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "transactions", "1"]
+								},
+								"description": "Get a specific transaction by its ID"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Transaction",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 95.00,\n  \"description\": \"Grocery shopping at Supermarket (Updated)\",\n  \"notes\": \"Weekly groceries - included household items\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/transactions/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "transactions", "1"]
+								},
+								"description": "Update an existing transaction (partial update supported)"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Transaction",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/transactions/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "transactions", "1"]
+								},
+								"description": "Soft delete a transaction (sets active=false)"
+							},
+							"response": []
+						}
+					],
+					"description": "Basic CRUD operations for transactions"
+				},
+				{
+					"name": "Queries & Filters",
+					"item": [
+						{
+							"name": "Get Recent Transactions",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/transactions/recent?limit=10",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "transactions", "recent"],
+									"query": [
+										{
+											"key": "limit",
+											"value": "10",
+											"description": "Number of recent transactions to retrieve"
+										}
+									]
+								},
+								"description": "Get the most recent transactions"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Transactions by Date Range",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/transactions/date-range?startDate=2024-01-01&endDate=2024-12-31&page=0&size=20",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "transactions", "date-range"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01",
+											"description": "Start date (YYYY-MM-DD)"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-12-31",
+											"description": "End date (YYYY-MM-DD)"
+										},
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "20"
+										}
+									]
+								},
+								"description": "Filter transactions by date range"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Transactions by Category",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/transactions/category/2?page=0&size=20",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "transactions", "category", "2"],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "20"
+										}
+									]
+								},
+								"description": "Get all transactions for a specific category"
+							},
+							"response": []
+						}
+					],
+					"description": "Query and filter operations"
+				},
+				{
+					"name": "Statistics & Summaries",
+					"item": [
+						{
+							"name": "Get Totals (Income, Expenses, Balance)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/transactions/summary/totals?startDate=2024-01-01&endDate=2024-12-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "transactions", "summary", "totals"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01",
+											"description": "Start date (YYYY-MM-DD)"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-12-31",
+											"description": "End date (YYYY-MM-DD)"
+										}
+									]
+								},
+								"description": "Calculate total income, expenses, and balance for a date range"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Expenses by Category",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/transactions/summary/by-category?startDate=2024-01-01&endDate=2024-12-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "transactions", "summary", "by-category"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01",
+											"description": "Start date (YYYY-MM-DD)"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-12-31",
+											"description": "End date (YYYY-MM-DD)"
+										}
+									]
+								},
+								"description": "Get expense breakdown by category"
+							},
+							"response": []
+						}
+					],
+					"description": "Statistical and summary endpoints"
+				},
+				{
+					"name": "Test Scenarios",
+					"item": [
+						{
+							"name": "Create Multiple Test Transactions",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 45.00,\n  \"description\": \"Restaurant dinner\",\n  \"categoryId\": 3,\n  \"transactionType\": \"EXPENSE\",\n  \"paymentMethod\": \"CARD\",\n  \"transactionDate\": \"2024-12-07\",\n  \"notes\": \"Dinner with friends\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/transactions",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "transactions"]
+								},
+								"description": "Create a test transaction for restaurants"
+							},
+							"response": []
+						},
+						{
+							"name": "Test - Invalid Amount (Should Fail)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": -50.00,\n  \"description\": \"Test invalid amount\",\n  \"categoryId\": 2,\n  \"transactionType\": \"EXPENSE\",\n  \"paymentMethod\": \"CASH\",\n  \"transactionDate\": \"2024-12-08\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/transactions",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "transactions"]
+								},
+								"description": "Test validation - negative amounts should fail"
+							},
+							"response": []
+						},
+						{
+							"name": "Test - Missing Required Fields (Should Fail)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 50.00,\n  \"description\": \"Test missing fields\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/transactions",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "transactions"]
+								},
+								"description": "Test validation - missing required fields should fail"
+							},
+							"response": []
+						},
+						{
+							"name": "Test - Invalid Category (Should Fail)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 50.00,\n  \"description\": \"Test invalid category\",\n  \"categoryId\": 99999,\n  \"transactionType\": \"EXPENSE\",\n  \"paymentMethod\": \"CASH\",\n  \"transactionDate\": \"2024-12-08\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/transactions",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "v1", "transactions"]
+								},
+								"description": "Test validation - non-existent category should fail"
+							},
+							"response": []
+						}
+					],
+					"description": "Test scenarios including error cases"
+				}
+			],
+			"description": "Transaction management endpoints"
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}
+

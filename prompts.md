@@ -262,3 +262,154 @@ ya hice el commit pero me quedó muy corto, y también hice push, como hago para
 - Características técnicas
 - Datos de prueba
 - Performance targets
+
+---
+
+## **Fase 2: Implementación Backend API (Ticket ET-001)**
+
+**Prompt 1: Inicio de implementación del backend**
+```
+correcto, procedamos con el segundo Ticket ET-001 pero aún no empieces a implementar, primero dame el plan para revisarlo
+```
+
+**Respuesta del asistente:** Proporcionó un plan detallado de 10 fases para implementar el backend con Spring Boot y Gradle:
+- Fase 0: Configuración inicial del proyecto (Gradle, application.yml, main class)
+- Fase 1: Entidades JPA (5 entidades + 2 enums)
+- Fase 2: DTOs (7 clases: Request y Response)
+- Fase 3: Repositories (5 interfaces con Spring Data JPA)
+- Fase 4: Services (3 servicios con lógica de negocio)
+- Fase 5: Controllers (3 controllers REST)
+- Fase 6: Seguridad JWT (pendiente para fase futura)
+- Fase 7: Exception Handling (5 clases de excepciones)
+- Fase 8: Validaciones (Bean Validation)
+- Fase 9: Documentación OpenAPI/Swagger
+- Fase 10: Tests (pendiente)
+
+**Prompt 2: Confirmación para continuar**
+```
+continua
+```
+
+**Respuesta del asistente:** Implementó exitosamente todas las fases planificadas:
+- **52 archivos creados** en total
+- **38 clases Java** (entidades, DTOs, services, controllers, config, exceptions)
+- **4 archivos de configuración** (Gradle, application.yml)
+- **3 archivos de documentación** (README.md, TECHNICAL_NOTES.md, api-examples.http)
+- **1 colección Postman** completa con 23 requests
+
+**Arquitectura implementada:**
+```
+Controllers (3) → TransactionController (10 endpoints), CategoryController (2), HealthController (2)
+Services (6)    → TransactionService, CategoryService, UserService + implementaciones
+Repositories (5) → Spring Data JPA con queries personalizados
+Entities (7)    → User, Category, Transaction, Budget, UserSession + 2 Enums
+DTOs (7)        → TransactionCreate/Update/Response/Summary, Category, Page, Error
+Exceptions (5)  → ResourceNotFound, BadRequest, Unauthorized, BusinessValidation + GlobalHandler
+Config (4)      → JPA, OpenAPI, Security (temporal), Web (CORS)
+```
+
+**Prompt 3: Error al compilar - falta Gradle wrapper**
+```
+@bash (134-135) [Error: ./gradlew: No such file or directory]
+```
+
+**Respuesta del asistente:** 
+- Creó los archivos del Gradle Wrapper (gradlew, gradlew.bat, gradle-wrapper.properties)
+- Descargó gradle-wrapper.jar
+- Hizo el script ejecutable
+- Compilación exitosa: `BUILD SUCCESSFUL in 16s`
+
+**Prompt 4: Error al iniciar - bean duplicado jpaAuditingHandler**
+```
+[Error: The bean 'jpaAuditingHandler' could not be registered. A bean with that name has already been defined]
+```
+
+**Respuesta del asistente:** Identificó que `@EnableJpaAuditing` estaba duplicado en:
+- ExpenseTrackerApplication.java
+- JpaConfig.java
+
+Eliminó la anotación de ExpenseTrackerApplication.java, dejándola solo en JpaConfig.java.
+
+**Prompt 5: Error 404 en endpoint /api/v1/health**
+```
+a pesar de que corrió bien cuando abro desde el navegador la url http://localhost:8080/api/v1/health obtengo error: Whitelabel Error Page
+```
+
+**Respuesta del asistente:** Identificó el problema en application.yml:
+- Tenía `context-path: /api` configurado
+- Esto causaba que las URLs fueran `/api/api/v1/health`
+- Eliminó el context-path
+- URLs correctas: `http://localhost:8080/api/v1/health`
+
+**Prompt 6: Error al crear transacción - tipos ENUM incompatibles**
+```
+ERROR: column "payment_method" is of type payment_method_enum but expression is of type character varying
+```
+
+**Respuesta del asistente:** Identificó incompatibilidad entre ENUMs personalizados de PostgreSQL y mapeo de Hibernate. Intentó varias soluciones:
+1. Usar `@JdbcTypeCode(java.sql.Types.OTHER)` - falló
+2. Cambiar `ddl-auto` a `none` - resolvió el inicio pero persistió error en INSERT
+3. Solución final: **Rediseñar el esquema desde el principio**
+
+**Prompt 7: Decisión de rediseño**
+```
+sigo teniendo errores, y si en vez de hacer una migración para corregir esto, aprovechando que el proyecto es nuevo, ya teniendo en cuenta todo esto porque no creamos la estructura nueva y bien desde el principio?
+```
+
+**Respuesta del asistente:** Excelente decisión del usuario. Implementó:
+1. **Modificó V1__Initial_Schema.sql:**
+   - Eliminó `CREATE TYPE transaction_type_enum` y `CREATE TYPE payment_method_enum`
+   - Cambió columnas a `VARCHAR(20)`
+   - Agregó CHECK constraints: `CHECK (transaction_type IN ('INCOME', 'EXPENSE'))`
+   - Agregó CHECK constraints: `CHECK (payment_method IN ('CASH', 'CARD', 'TRANSFER', 'OTHER'))`
+
+2. **Eliminó V4__Change_Enums_To_Varchar.sql** (migración fallida)
+
+3. **Creó script reset-database.sh** para limpiar y recrear la BD
+
+4. **Ejecutó reset completo:**
+   ```bash
+   docker-compose down -v
+   docker-compose up -d
+   ```
+
+**Resultado:** Esquema correcto desde el inicio, 100% compatible con Hibernate.
+
+**Prompt 8: Error de validación - monto negativo**
+```
+[Error: Amount must be greater than zero for income or less than zero for expense]
+```
+
+**Respuesta del asistente:** Identificó que la validación `@DecimalMin(value = "0.01")` en la entidad Transaction no permitía valores negativos, pero el diseño requiere gastos como negativos.
+
+**Solución:** Eliminó `@DecimalMin` dejando que:
+- El service ajuste el signo (positivo para INCOME, negativo para EXPENSE)
+- El `@PrePersist` valide coherencia antes de persistir
+- El CHECK constraint en BD garantice integridad
+
+**Prompt 9: Confirmación final**
+```
+funcionó!
+```
+
+**Resultado:** ✅ **BACKEND API COMPLETAMENTE OPERATIVO**
+
+**Características finales implementadas:**
+- ✅ CRUD completo de transacciones
+- ✅ 14 endpoints REST funcionales
+- ✅ Validaciones en 4 niveles (BD, Entity, DTO, Service)
+- ✅ Manejo centralizado de errores
+- ✅ Documentación OpenAPI/Swagger
+- ✅ Colección Postman completa
+- ✅ Soft delete para auditoría
+- ✅ Paginación y ordenamiento
+- ✅ JPA Auditing automático
+- ✅ CORS configurado
+- ✅ Logging estructurado
+
+**Archivos de documentación creados:**
+- backend/README.md (guía de uso completa)
+- backend/TECHNICAL_NOTES.md (decisiones técnicas y arquitectura)
+- backend/api-examples.http (ejemplos de peticiones)
+- backend/ExpenseTracker-API.postman_collection.json (23 requests organizados)
+- reset-database.sh (script de utilidad)

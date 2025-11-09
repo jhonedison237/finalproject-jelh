@@ -1,0 +1,140 @@
+### ExpenseTracker API - Example Requests
+### Use with IntelliJ IDEA HTTP Client or VS Code REST Client extension
+
+### Variables
+@baseUrl = http://localhost:8080/api/v1
+@contentType = application/json
+
+### =================================
+### HEALTH CHECK
+### =================================
+
+### Health status
+GET {{baseUrl}}/health
+
+### Ping
+GET {{baseUrl}}/health/ping
+
+### =================================
+### CATEGORIES
+### =================================
+
+### Get all categories
+GET {{baseUrl}}/categories
+
+### Get category by ID
+GET {{baseUrl}}/categories/1
+
+### =================================
+### TRANSACTIONS - CREATE
+### =================================
+
+### Create income transaction
+POST {{baseUrl}}/transactions
+Content-Type: {{contentType}}
+
+{
+  "amount": 5000.00,
+  "description": "Salary December",
+  "categoryId": 1,
+  "transactionType": "INCOME",
+  "paymentMethod": "TRANSFER",
+  "transactionDate": "2024-12-01",
+  "notes": "Monthly salary"
+}
+
+### Create expense transaction
+POST {{baseUrl}}/transactions
+Content-Type: {{contentType}}
+
+{
+  "amount": 50.00,
+  "description": "Lunch at restaurant",
+  "categoryId": 2,
+  "transactionType": "EXPENSE",
+  "paymentMethod": "CARD",
+  "transactionDate": "2024-12-05",
+  "notes": "Team lunch"
+}
+
+### =================================
+### TRANSACTIONS - READ
+### =================================
+
+### Get all transactions (paginated)
+GET {{baseUrl}}/transactions?page=0&size=10&sortBy=transactionDate&sortDir=DESC
+
+### Get transaction by ID
+GET {{baseUrl}}/transactions/1
+
+### Get recent transactions
+GET {{baseUrl}}/transactions/recent?limit=5
+
+### Get transactions by date range
+GET {{baseUrl}}/transactions/date-range?startDate=2024-01-01&endDate=2024-12-31&page=0&size=20
+
+### Get transactions by category
+GET {{baseUrl}}/transactions/category/2?page=0&size=10
+
+### =================================
+### TRANSACTIONS - UPDATE
+### =================================
+
+### Update transaction
+PUT {{baseUrl}}/transactions/1
+Content-Type: {{contentType}}
+
+{
+  "amount": 55.00,
+  "description": "Lunch at restaurant (updated)",
+  "notes": "Included tip"
+}
+
+### =================================
+### TRANSACTIONS - DELETE
+### =================================
+
+### Delete transaction (soft delete)
+DELETE {{baseUrl}}/transactions/1
+
+### =================================
+### TRANSACTIONS - SUMMARY
+### =================================
+
+### Get totals (income, expenses, balance)
+GET {{baseUrl}}/transactions/summary/totals?startDate=2024-01-01&endDate=2024-12-31
+
+### Get expenses by category
+GET {{baseUrl}}/transactions/summary/by-category?startDate=2024-01-01&endDate=2024-12-31
+
+### =================================
+### ERROR EXAMPLES
+### =================================
+
+### Invalid transaction (missing required fields)
+POST {{baseUrl}}/transactions
+Content-Type: {{contentType}}
+
+{
+  "amount": 50.00
+}
+
+### Invalid date range
+GET {{baseUrl}}/transactions/date-range?startDate=2024-12-31&endDate=2024-01-01
+
+### Transaction not found
+GET {{baseUrl}}/transactions/999999
+
+### Category not found
+POST {{baseUrl}}/transactions
+Content-Type: {{contentType}}
+
+{
+  "amount": 50.00,
+  "description": "Test",
+  "categoryId": 999999,
+  "transactionType": "EXPENSE",
+  "paymentMethod": "CARD",
+  "transactionDate": "2024-12-05"
+}
+
