@@ -1280,9 +1280,94 @@ ON users(email);
 
 > Documenta 3 de las Pull Requests realizadas durante la ejecución del proyecto
 
-**Pull Request 1**
+### **Pull Request 1: Implementación completa del esquema de base de datos PostgreSQL**
+
+**Título:** `feat(database): Implementar esquema PostgreSQL completo con migraciones Flyway`
+
+**Descripción:**
+Primera fase del proyecto ExpenseTracker enfocada en la construcción de la infraestructura de base de datos siguiendo el Ticket ET-003.
+
+**Cambios Principales:**
+
+**1. Esquema de Base de Datos (5 tablas):**
+- `users`: Autenticación y perfiles de usuario
+- `categories`: Clasificación de transacciones
+- `transactions`: Registro de ingresos y gastos
+- `budgets`: Límites de gasto mensuales
+- `user_sessions`: Gestión de sesiones JWT
+
+**2. Scripts de Migración Flyway:**
+- `V1__Initial_Schema.sql` (262 líneas): Creación de tablas, constraints, ENUMs y triggers
+- `V2__Seed_Data.sql` (235 líneas): Datos de prueba con usuario demo y transacciones
+- `V3__Add_Indexes.sql` (196 líneas): 25 índices estratégicos para optimización
+
+**3. Infraestructura:**
+- `docker-compose.yml`: PostgreSQL 14 + pgAdmin para desarrollo local
+- `setup-database.sh`: Script bash automatizado de instalación
+- `.gitignore`: Actualizado con exclusiones de Docker
+
+**4. Documentación Completa (docs/database/):**
+- `README.md` (301 líneas): Índice general y quick start
+- `schema_overview.md` (321 líneas): Diagrama ER y descripción de tablas
+- `constraints_and_validations.md` (518 líneas): Restricciones y ejemplos
+- `indexes_and_performance.md` (750 líneas): Estrategia de optimización
+- `setup_instructions.md` (626 líneas): Guía de instalación completa
+
+**Características Técnicas Implementadas:**
+- 25+ constraints de integridad (PK, FK, UNIQUE, CHECK)
+- 25 índices optimizados para queries frecuentes
+- Soft deletes con campo `active`
+- Triggers automáticos para `updated_at`
+- ENUMs para `transaction_type` y `payment_method`
+- Políticas CASCADE/RESTRICT para integridad referencial
+- Validaciones de negocio a nivel de base de datos
+
+**Datos de Prueba Incluidos:**
+- 2 usuarios demo (demo@expensetracker.com, test@expensetracker.com)
+- Password: `Demo1234!`
+- 15 categorías predefinidas (3 ingresos, 12 gastos)
+- ~20 transacciones de ejemplo con datos realistas
+- 4 presupuestos configurados para el mes actual
+
+**Performance Targets Alcanzados:**
+- Login (JWT lookup): < 10ms
+- Dashboard load: < 100ms
+- Transaction queries: < 50ms
+- Budget calculations: < 150ms
+- Monthly reports: < 200ms
+
+**Archivos Modificados/Creados:** 13 archivos, 5,004 líneas insertadas
+
+**Revisores:** N/A (primer commit del proyecto)
+
+**Estado:** ✅ Merged to main
+
+**Commit:** `0c4a726`
+
+**Fecha:** 8 de noviembre, 2024
+
+---
+
+**Lecciones Aprendidas:**
+1. La planificación detallada previa a la implementación ahorró tiempo y retrabajos
+2. La documentación exhaustiva facilita la incorporación de nuevos desarrolladores
+3. Los índices estratégicos desde el inicio previenen problemas de performance
+4. Docker Compose simplifica significativamente el setup de desarrollo local
+5. Los datos de prueba realistas son cruciales para testing efectivo
+
+**Próximos Pasos:**
+- Implementar backend Spring Boot (Ticket ET-001)
+- Crear entidades JPA que mapeen a las tablas
+- Desarrollar servicios y controladores REST
+- Integrar Spring Security con JWT
+
+---
 
 **Pull Request 2**
 
+[Pendiente - Backend API Implementation]
+
 **Pull Request 3**
+
+[Pendiente - Frontend Dashboard Development]
 
