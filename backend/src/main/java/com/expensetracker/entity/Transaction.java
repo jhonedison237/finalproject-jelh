@@ -92,7 +92,7 @@ public class Transaction {
      */
     @PrePersist
     @PreUpdate
-    private void validateAmountSign() {
+    public void validateAmountSign() {
         if (transactionType == TransactionType.INCOME && amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Income amount must be positive");
         }

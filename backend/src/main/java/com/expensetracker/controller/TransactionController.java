@@ -207,11 +207,11 @@ public class TransactionController {
         User currentUser = getCurrentUser();
         BigDecimal totalIncome = transactionService.calculateTotalIncome(currentUser, startDate, endDate);
         BigDecimal totalExpenses = transactionService.calculateTotalExpenses(currentUser, startDate, endDate);
-        BigDecimal balance = totalIncome.add(totalExpenses); // expenses are negative
+        BigDecimal balance = totalIncome.subtract(totalExpenses); // totalExpenses is already absolute
         
         return ResponseEntity.ok(Map.of(
                 "totalIncome", totalIncome,
-                "totalExpenses", totalExpenses.abs(), // Return positive value for expenses
+                "totalExpenses", totalExpenses, // Already positive from repository
                 "balance", balance
         ));
     }
