@@ -333,6 +333,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .categoryId(transaction.getCategory().getId())
                 .categoryName(transaction.getCategory().getName())
                 .categoryColor(transaction.getCategory().getColor())
+                .categoryIcon(transaction.getCategory().getIcon())
                 .build();
     }
 }

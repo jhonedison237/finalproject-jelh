@@ -28,6 +28,7 @@ public class TransactionSummaryDTO {
     private Long categoryId;
     private String categoryName;
     private String categoryColor;
+    private String categoryIcon;
     
     // Computed fields
     private BigDecimal absoluteAmount;

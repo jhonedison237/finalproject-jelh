@@ -153,3 +153,18 @@ logs
 # Application specific
 application-local.properties
 application-dev.properties
+
+# Next.js
+frontend/.next/
+frontend/out/
+frontend/.env*.local
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Dev scripts
+backend.log
+frontend.log
+.backend.pid
+.frontend.pid
