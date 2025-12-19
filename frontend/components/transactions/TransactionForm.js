@@ -93,15 +93,11 @@ export const TransactionForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('handleSubmit called'); // Debug
     setSubmitError(null);
 
     if (!validate()) {
-      console.log('Validation failed'); // Debug
       return;
     }
-
-    console.log('Validation passed, submitting...'); // Debug
 
     try {
       // Normalizar el monto según el tipo de transacción
@@ -120,11 +116,8 @@ export const TransactionForm = ({
         notes: formData.notes.trim() || null,
       };
 
-      console.log('Submitting data:', data); // Debug
       await onSubmit(data);
-      console.log('Submit successful'); // Debug
     } catch (error) {
-      console.error('Submit error:', error); // Debug
       setSubmitError(error.message || 'Error al guardar la transacción');
     }
   };

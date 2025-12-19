@@ -21,7 +21,7 @@ NC='\033[0m' # No Color
 
 echo ""
 echo -e "${BLUE}╔════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║  ExpenseTracker - Database Setup      ║${NC}"
+echo -e "${BLUE}║  ExpenseTracker - Database Setup       ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════╝${NC}"
 echo ""
 
